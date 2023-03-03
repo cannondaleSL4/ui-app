@@ -4,10 +4,20 @@ function Report() {
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/report/topten', { mode: 'cors' })
-      .then(response => response.json())
-      .then(data => setCustomers(data))
-      .catch(error => console.error(error));
+    const fetchCustomers = () => {
+      fetch('http://localhost:8080/report/topten', { mode: 'cors' })
+        .then(response => response.json())
+        .then(data => setCustomers(data))
+        .catch(error => console.error(error));
+    };
+
+    fetchCustomers();
+
+    const intervalId = setInterval(fetchCustomers, 10000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
